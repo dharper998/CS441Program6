@@ -12,6 +12,7 @@ public class GameActivity extends Game {
 	SpriteBatch batch;
 	Texture img;
 	private Game game;
+	public static Skin skin;
 
 	public GameActivity(){
 		game = this;
@@ -19,6 +20,7 @@ public class GameActivity extends Game {
 
 	@Override
 	public void create () {
+		skin = new Skin(Gdx.files.internal("skin/quantum-horizon-ui.json"));
 		this.setScreen(new MainMenu(this));
 	}
 
@@ -31,5 +33,9 @@ public class GameActivity extends Game {
 	public void dispose () {
 		batch.dispose();
 		img.dispose();
+	}
+
+	public Skin getSkin(){
+		return skin;
 	}
 }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -18,13 +19,9 @@ public class MainMenu implements Screen {
     public MainMenu(Game gameIn){
         game = gameIn;
         this.stage = new Stage(new ScreenViewport());
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = new BitmapFont();
-
-        TextButton playButton = new TextButton("Play!", textButtonStyle);
-        playButton.setTransform(true);
-        playButton.setScale(2f);
-        playButton.setWidth(Gdx.graphics.getWidth()/2);
+        TextButton playButton = new TextButton("Play!", GameActivity.skin);
+        playButton.setWidth(400f);
+        playButton.setHeight(50f);
         playButton.setPosition(Gdx.graphics.getWidth()/2-playButton.getWidth()/2,Gdx.graphics.getHeight()/2-playButton.getHeight()/2);
         playButton.addListener(new InputListener(){
             @Override
