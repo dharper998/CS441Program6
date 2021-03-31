@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,20 +25,28 @@ public class BreakoutScreen implements Screen {
     private Game game;
     private Stage stage;
     private OrthographicCamera camera;
-    Ball ball = new Ball();
-    Paddle paddle = new Paddle();
+    Ball ball;
+    Paddle paddle;
     ArrayList<Brick> bricks;
-    Rectangle intersection = new Rectangle();
+    Rectangle intersection;
     int count;
-    int score = 0;
+    int score;
 
-    public BreakoutScreen(Game gameIn){
+    public BreakoutScreen(Game gameIn, int countIn){
         game = gameIn;
         this.stage = new Stage(new ScreenViewport());
         bricks = new ArrayList<Brick>();
+        ball = new Ball();
+        paddle = new Paddle();
+        intersection = new Rectangle();
+        score = 0;
+
+        count = countIn;
         createBricks(count);
+
         ball.setPosition(Gdx.graphics.getWidth()/2-ball.getWidth()/2,Gdx.graphics.getHeight()/2-ball.getHeight()/2);
         ball.updateBounds();
+
         paddle.setPosition(Gdx.graphics.getWidth()/2-paddle.getWidth()/2,Gdx.graphics.getHeight()/8-paddle.getHeight());
         paddle.updateBounds();
         paddle.addListener(new DragListener() {
@@ -50,7 +59,7 @@ public class BreakoutScreen implements Screen {
                 paddle.setVelocity(0);
             }
         });
-        Label score = new Label();
+
         this.stage.addActor(ball);
         this.stage.addActor(paddle);
     }
@@ -87,10 +96,30 @@ public class BreakoutScreen implements Screen {
         }
         checkBricks();
         if(!ball.update()){
-            game.setScreen(new MainMenu(game));
+            exit();
         }
         stage.act();
         stage.draw();
+    }
+
+    public void exit(){
+        Preferences scores = Gdx.app.getPreferences("Scoreboard");
+        int score1 = scores.getInteger("score1", 0);
+        int score2 = scores.getInteger("score2", 0);
+        int score3 = scores.getInteger("score3", 0);
+        if(this.score > score1){
+            scores.putInteger("score1", this.score);
+            scores.putInteger("score2", score1);
+            scores.putInteger("score3", score2);
+        } else if(this.score > score2){
+            scores.putInteger("score2", this.score);
+            scores.putInteger("score3", score2);
+        } else if(this.score > score3){
+            scores.putInteger("score3", this.score);
+        }
+        scores.flush();
+        dispose();
+        game.setScreen(new Scoreboard(game));
     }
 
     public void checkBricks(){
@@ -138,6 +167,7 @@ public class BreakoutScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
+        bricks.clear();
     }
 }

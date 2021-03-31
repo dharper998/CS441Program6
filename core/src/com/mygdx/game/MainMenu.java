@@ -21,12 +21,14 @@ public class MainMenu implements Screen {
         this.stage = new Stage(new ScreenViewport());
         TextButton playButton = new TextButton("Play!", GameActivity.skin);
         playButton.setWidth(400f);
-        playButton.setHeight(50f);
+        playButton.setHeight(100f);
+        playButton.getLabel().setFontScale(2f);
         playButton.setPosition(Gdx.graphics.getWidth()/2-playButton.getWidth()/2,Gdx.graphics.getHeight()/2-playButton.getHeight()/2);
         playButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new BreakoutScreen(game));
+                dispose();
+                game.setScreen(new BreakoutScreen(game, 36));
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -72,6 +74,6 @@ public class MainMenu implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 }
