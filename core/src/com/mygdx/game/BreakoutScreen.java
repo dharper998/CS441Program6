@@ -31,8 +31,9 @@ public class BreakoutScreen implements Screen {
     Rectangle intersection;
     int count;
     int score;
+    String username;
 
-    public BreakoutScreen(Game gameIn, int countIn){
+    public BreakoutScreen(Game gameIn, int countIn, String usernameIn){
         game = gameIn;
         this.stage = new Stage(new ScreenViewport());
         bricks = new ArrayList<Brick>();
@@ -40,6 +41,7 @@ public class BreakoutScreen implements Screen {
         paddle = new Paddle();
         intersection = new Rectangle();
         score = 0;
+        username = usernameIn;
 
         count = countIn;
         createBricks(count);
@@ -87,6 +89,14 @@ public class BreakoutScreen implements Screen {
         Gdx.gl.glClearColor(0, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if(ball.bounds.overlaps(paddle.bounds)){
+            if(bricks.size() == 0){
+                createBricks(count);
+                if(ball.speedY > 0){
+                    ball.speedY += 2;
+                } else{
+                    ball.speedY -= 2;
+                }
+            }
             if(ball.getY() > paddle.getY()){
                 ball.speedY = -ball.speedY;
             }
@@ -107,15 +117,23 @@ public class BreakoutScreen implements Screen {
         int score1 = scores.getInteger("score1", 0);
         int score2 = scores.getInteger("score2", 0);
         int score3 = scores.getInteger("score3", 0);
+        String user1 = scores.getString("user1", "");
+        String user2 = scores.getString("user2", "");
         if(this.score > score1){
             scores.putInteger("score1", this.score);
+            scores.putString("user1", this.username);
             scores.putInteger("score2", score1);
+            scores.putString("user2", user1);
             scores.putInteger("score3", score2);
+            scores.putString("user3", user2);
         } else if(this.score > score2){
             scores.putInteger("score2", this.score);
+            scores.putString("user2", this.username);
             scores.putInteger("score3", score2);
+            scores.putString("user3", user2);
         } else if(this.score > score3){
             scores.putInteger("score3", this.score);
+            scores.putString("user3", this.username);
         }
         scores.flush();
         dispose();
@@ -123,7 +141,6 @@ public class BreakoutScreen implements Screen {
     }
 
     public void checkBricks(){
-        ArrayList<Brick> toRemove = new ArrayList<Brick>();
         Iterator<Brick> itr = bricks.iterator();
         while(itr.hasNext()){
             Brick brick = itr.next();

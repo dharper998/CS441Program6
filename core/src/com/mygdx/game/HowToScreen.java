@@ -2,10 +2,9 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,33 +13,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class Scoreboard implements Screen {
-    Preferences scores;
-    Stage stage;
-    Game game;
+public class HowToScreen implements Screen {
 
-    public Scoreboard(Game gameIn){
+    private Game game;
+    private Stage stage;
+
+    public HowToScreen(Game gameIn){
         game = gameIn;
         this.stage = new Stage(new ScreenViewport());
-        scores = Gdx.app.getPreferences("Scoreboard");
-        Label scoreboardLabel = new Label("High Scores", GameActivity.skin);
-        setLabelPosition(scoreboardLabel, (int) (Gdx.graphics.getHeight()/2 + scoreboardLabel.getHeight() * 10));
-
-        int score1 = scores.getInteger("score1", 0);
-        String user1 = scores.getString("user1", "");
-        Label score1Label = new Label(user1 + " : " + Integer.toString(score1), GameActivity.skin);
-        setLabelPosition(score1Label, Gdx.graphics.getHeight()/2);
-
-        int score2 = scores.getInteger("score2", 0);
-        String user2 = scores.getString("user2", "");
-        Label score2Label = new Label(user2 + " : " + Integer.toString(score2), GameActivity.skin);
-        setLabelPosition(score2Label, (int) (Gdx.graphics.getHeight()/2-score2Label.getHeight() * 10));
-
-        int score3 = scores.getInteger("score3", 0);
-        String user3 = scores.getString("user3", "");
-        Label score3Label = new Label(user3 + " : " + Integer.toString(score3), GameActivity.skin);
-        setLabelPosition(score3Label, (int) (Gdx.graphics.getHeight()/2-score3Label.getHeight() * 20));
-
         TextButton menuButton = new TextButton("Main Menu", GameActivity.skin);
         menuButton.setWidth(400f);
         menuButton.setHeight(100f);
@@ -58,11 +38,41 @@ public class Scoreboard implements Screen {
             }
         });
 
-        stage.addActor(scoreboardLabel);
-        stage.addActor(score1Label);
-        stage.addActor(score2Label);
-        stage.addActor(score3Label);
+        Label howToLabel = new Label("How To Play", GameActivity.skin);
+        setLabelPosition(howToLabel, (int) (Gdx.graphics.getHeight() - howToLabel.getHeight() * 6));
+
+        Label howTo1 = new Label("Touch the paddle to drag\nit across the screen", GameActivity.skin);
+        howTo1.setFontScale(3f);
+        howTo1.setWidth(Gdx.graphics.getWidth());
+        howTo1.setPosition(0,(int) (Gdx.graphics.getHeight() - howTo1.getHeight() * 12));
+        howTo1.setAlignment(Align.center);
+
+        Label howTo2 = new Label("Bounce the ball into the\nbricks to break them and\nscore points!", GameActivity.skin);
+        howTo2.setFontScale(3f);
+        howTo2.setWidth(Gdx.graphics.getWidth());
+        howTo2.setPosition(0,(int) (Gdx.graphics.getHeight() - howTo1.getHeight() * 24));
+        howTo2.setAlignment(Align.center);
+
+        Label howTo3 = new Label("If the ball reaches the\nbottom of the screen,\nit's game over", GameActivity.skin);
+        howTo3.setFontScale(3f);
+        howTo3.setWidth(Gdx.graphics.getWidth());
+        howTo3.setPosition(0,(int) (Gdx.graphics.getHeight() - howTo1.getHeight() * 36));
+        howTo3.setAlignment(Align.center);
+
+        Label howTo4 = new Label("When you run out of\nbricks to break, more will\nappear and the ball\nwill get faster", GameActivity.skin);
+        howTo4.setFontScale(3f);
+        howTo4.setWidth(Gdx.graphics.getWidth());
+        howTo4.setPosition(0,(int) (Gdx.graphics.getHeight() - howTo1.getHeight() * 48));
+        howTo4.setAlignment(Align.center);
+
+
         stage.addActor(menuButton);
+        stage.addActor(howToLabel);
+        stage.addActor(howTo1);
+        stage.addActor(howTo2);
+        stage.addActor(howTo3);
+        stage.addActor(howTo4);
+
     }
 
     public void setLabelPosition(Label label, int y){
@@ -71,6 +81,7 @@ public class Scoreboard implements Screen {
         label.setPosition(0,y);
         label.setAlignment(Align.center);
     }
+
 
     @Override
     public void show() {
