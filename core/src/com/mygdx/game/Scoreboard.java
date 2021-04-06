@@ -34,12 +34,12 @@ public class Scoreboard implements Screen {
         int score2 = scores.getInteger("score2", 0);
         String user2 = scores.getString("user2", "");
         Label score2Label = new Label(user2 + " : " + Integer.toString(score2), GameActivity.skin);
-        setLabelPosition(score2Label, (int) (Gdx.graphics.getHeight()/2-score2Label.getHeight() * 10));
+        setLabelPosition(score2Label, (int) (Gdx.graphics.getHeight()/2-score2Label.getHeight() * 6));
 
         int score3 = scores.getInteger("score3", 0);
         String user3 = scores.getString("user3", "");
         Label score3Label = new Label(user3 + " : " + Integer.toString(score3), GameActivity.skin);
-        setLabelPosition(score3Label, (int) (Gdx.graphics.getHeight()/2-score3Label.getHeight() * 20));
+        setLabelPosition(score3Label, (int) (Gdx.graphics.getHeight()/2-score3Label.getHeight() * 12));
 
         TextButton menuButton = new TextButton("Main Menu", GameActivity.skin);
         menuButton.setWidth(400f);

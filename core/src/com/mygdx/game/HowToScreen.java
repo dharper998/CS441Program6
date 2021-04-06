@@ -44,25 +44,25 @@ public class HowToScreen implements Screen {
         Label howTo1 = new Label("Touch the paddle to drag\nit across the screen", GameActivity.skin);
         howTo1.setFontScale(3f);
         howTo1.setWidth(Gdx.graphics.getWidth());
-        howTo1.setPosition(0,(int) (Gdx.graphics.getHeight() - howTo1.getHeight() * 12));
+        howTo1.setPosition(0,(int) (Gdx.graphics.getHeight() - howTo1.getHeight() * 8));
         howTo1.setAlignment(Align.center);
 
         Label howTo2 = new Label("Bounce the ball into the\nbricks to break them and\nscore points!", GameActivity.skin);
         howTo2.setFontScale(3f);
         howTo2.setWidth(Gdx.graphics.getWidth());
-        howTo2.setPosition(0,(int) (Gdx.graphics.getHeight() - howTo1.getHeight() * 24));
+        howTo2.setPosition(0,(int) (Gdx.graphics.getHeight() - howTo1.getHeight() * 16));
         howTo2.setAlignment(Align.center);
 
         Label howTo3 = new Label("If the ball reaches the\nbottom of the screen,\nit's game over", GameActivity.skin);
         howTo3.setFontScale(3f);
         howTo3.setWidth(Gdx.graphics.getWidth());
-        howTo3.setPosition(0,(int) (Gdx.graphics.getHeight() - howTo1.getHeight() * 36));
+        howTo3.setPosition(0,(int) (Gdx.graphics.getHeight() - howTo1.getHeight() * 24));
         howTo3.setAlignment(Align.center);
 
         Label howTo4 = new Label("When you run out of\nbricks to break, more will\nappear and the ball\nwill get faster", GameActivity.skin);
         howTo4.setFontScale(3f);
         howTo4.setWidth(Gdx.graphics.getWidth());
-        howTo4.setPosition(0,(int) (Gdx.graphics.getHeight() - howTo1.getHeight() * 48));
+        howTo4.setPosition(0,(int) (Gdx.graphics.getHeight() - howTo1.getHeight() * 32));
         howTo4.setAlignment(Align.center);
 
 
