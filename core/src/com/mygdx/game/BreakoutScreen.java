@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import org.w3c.dom.css.Rect;
@@ -25,30 +26,39 @@ public class BreakoutScreen implements Screen {
     private Game game;
     private Stage stage;
     private OrthographicCamera camera;
-    Ball ball;
+    ArrayList<Ball> balls;
     Paddle paddle;
     ArrayList<Brick> bricks;
     Rectangle intersection;
     int count;
     int score;
     String username;
+    int speedScale;
+    Label scoreLabel;
 
-    public BreakoutScreen(Game gameIn, int countIn, String usernameIn){
+    public BreakoutScreen(Game gameIn, int countIn, String usernameIn, float speed, int ballCount, int speedScaleIn){
         game = gameIn;
         this.stage = new Stage(new ScreenViewport());
         bricks = new ArrayList<Brick>();
-        ball = new Ball();
-        paddle = new Paddle();
         intersection = new Rectangle();
         score = 0;
         username = usernameIn;
+        speedScale = speedScaleIn;
+        balls = new ArrayList<Ball>();
+        for(int i = 0; i<ballCount; i++){
+            balls.add(new Ball(speed));
+        }
 
         count = countIn;
         createBricks(count);
 
-        ball.setPosition(Gdx.graphics.getWidth()/2-ball.getWidth()/2,Gdx.graphics.getHeight()/2-ball.getHeight()/2);
-        ball.updateBounds();
+        for(int i = 0; i<balls.size(); i++){
+            Ball ball = balls.get(i);
+            ball.setPosition(Gdx.graphics.getWidth()/2-ball.getWidth() * 2 * i,Gdx.graphics.getHeight()/2-ball.getHeight() * 2 * i);
+            ball.updateBounds();
+        }
 
+        paddle = new Paddle();
         paddle.setPosition(Gdx.graphics.getWidth()/2-paddle.getWidth()/2,Gdx.graphics.getHeight()/8-paddle.getHeight());
         paddle.updateBounds();
         paddle.addListener(new DragListener() {
@@ -62,7 +72,17 @@ public class BreakoutScreen implements Screen {
             }
         });
 
-        this.stage.addActor(ball);
+        scoreLabel = new Label(Integer.toString(score), GameActivity.skin);
+        scoreLabel.setWidth(Gdx.graphics.getWidth());
+        scoreLabel.setHeight(200);
+        scoreLabel.setFontScale(3f);
+        scoreLabel.setPosition(40, Gdx.graphics.getHeight()-200);
+        scoreLabel.setAlignment(Align.left);
+
+        for(int i = 0; i<balls.size(); i++) {
+            this.stage.addActor(balls.get(i));
+        }
+        this.stage.addActor(scoreLabel);
         this.stage.addActor(paddle);
     }
 
@@ -88,26 +108,29 @@ public class BreakoutScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if(ball.bounds.overlaps(paddle.bounds)){
-            if(bricks.size() == 0){
-                createBricks(count);
-                if(ball.speedY > 0){
-                    ball.speedY += 2;
-                } else{
-                    ball.speedY -= 2;
+        for(int i = 0; i<balls.size(); i++) {
+            Ball ball = balls.get(i);
+            if (ball.bounds.overlaps(paddle.bounds)) {
+                if (bricks.size() == 0) {
+                    createBricks(count);
+                    if (ball.speedY > 0) {
+                        ball.speedY += speedScale;
+                    } else {
+                        ball.speedY -= speedScale;
+                    }
+                }
+                if (ball.getY() > paddle.getY()) {
+                    ball.speedY = -ball.speedY;
+                }
+                if (ball.speedX > 0 && paddle.speedX < 0 || ball.speedX < 0 && paddle.speedX > 0) {
+                    ball.speedX = paddle.speedX / 3;
                 }
             }
-            if(ball.getY() > paddle.getY()){
-                ball.speedY = -ball.speedY;
-            }
-            if(ball.speedX > 0 && paddle.speedX < 0 || ball.speedX < 0 && paddle.speedX > 0){
-                ball.speedX = paddle.speedX/3;
+            if (!ball.update()) {
+                exit();
             }
         }
         checkBricks();
-        if(!ball.update()){
-            exit();
-        }
         stage.act();
         stage.draw();
     }
@@ -141,22 +164,27 @@ public class BreakoutScreen implements Screen {
     }
 
     public void checkBricks(){
-        Iterator<Brick> itr = bricks.iterator();
-        while(itr.hasNext()){
-            Brick brick = itr.next();
-            if(Intersector.intersectRectangles(brick.bounds, ball.bounds, intersection)){
-                if(intersection.y > brick.bounds.y || intersection.y + intersection.height < brick.bounds.y + brick.bounds.height){
-                    ball.speedY = -ball.speedY;
-                    brick.remove();
-                    itr.remove();
-                    score++;
-                    break;
-                } else if(intersection.x > brick.bounds.x || intersection.x + intersection.width < brick.bounds.x + brick.bounds.width){
-                    ball.speedX = -ball.speedX;
-                    brick.remove();
-                    itr.remove();
-                    score++;
-                    break;
+        for(int i = 0; i<balls.size(); i++) {
+            Ball ball = balls.get(i);
+            Iterator<Brick> itr = bricks.iterator();
+            while(itr.hasNext()){
+                Brick brick = itr.next();
+                if (Intersector.intersectRectangles(brick.bounds, ball.bounds, intersection)) {
+                    if (intersection.y > brick.bounds.y || intersection.y + intersection.height < brick.bounds.y + brick.bounds.height) {
+                        ball.speedY = -ball.speedY;
+                        brick.remove();
+                        itr.remove();
+                        score++;
+                        scoreLabel.setText(Integer.toString(score));
+                        break;
+                    } else if (intersection.x > brick.bounds.x || intersection.x + intersection.width < brick.bounds.x + brick.bounds.width) {
+                        ball.speedX = -ball.speedX;
+                        brick.remove();
+                        itr.remove();
+                        score++;
+                        scoreLabel.setText(Integer.toString(score));
+                        break;
+                    }
                 }
             }
         }

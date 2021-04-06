@@ -34,18 +34,62 @@ public class MainMenu implements Screen {
            }
         });
 
-        TextButton playButton = new TextButton("Play!", GameActivity.skin);
-        playButton.setWidth(400f);
-        playButton.setHeight(100f);
-        playButton.setColor(0, 1, 1, 1);
-        playButton.getLabel().setFontScale(2f);
-        playButton.setPosition(Gdx.graphics.getWidth()/2-playButton.getWidth()/2,Gdx.graphics.getHeight()/2-playButton.getHeight()/2);
-        playButton.addListener(new InputListener(){
+        TextButton easyButton = new TextButton("Play Easy", GameActivity.skin);
+        easyButton.setWidth(400f);
+        easyButton.setHeight(100f);
+        easyButton.setColor(0, 1, 1, 1);
+        easyButton.getLabel().setFontScale(2f);
+        easyButton.setPosition(Gdx.graphics.getWidth()/2-easyButton.getWidth()/2,Gdx.graphics.getHeight()/2);
+        easyButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 dispose();
-                System.out.println(usernameInput.getText());
-                game.setScreen(new BreakoutScreen(game, 16, usernameInput.getText()));
+                if(usernameInput.getText().contains("Enter Username:")){
+                    usernameInput.setText("");
+                }
+                game.setScreen(new BreakoutScreen(game, 16, usernameInput.getText(), -5f, 1, 2));
+            }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+
+        TextButton mediumButton = new TextButton("Play Medium", GameActivity.skin);
+        mediumButton.setWidth(400f);
+        mediumButton.setHeight(100f);
+        mediumButton.setColor(0, 1, 1, 1);
+        mediumButton.getLabel().setFontScale(2f);
+        mediumButton.setPosition(Gdx.graphics.getWidth()/2-mediumButton.getWidth()/2,Gdx.graphics.getHeight()/2-mediumButton.getHeight()*2);
+        mediumButton.addListener(new InputListener(){
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                dispose();
+                if(usernameInput.getText().contains("Enter Username:")){
+                    usernameInput.setText("");
+                }
+                game.setScreen(new BreakoutScreen(game, 36, usernameInput.getText(), -8f, 1, 4));
+            }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+
+        TextButton hardButton = new TextButton("Play Hard", GameActivity.skin);
+        hardButton.setWidth(400f);
+        hardButton.setHeight(100f);
+        hardButton.setColor(0, 1, 1, 1);
+        hardButton.getLabel().setFontScale(2f);
+        hardButton.setPosition(Gdx.graphics.getWidth()/2-hardButton.getWidth()/2,Gdx.graphics.getHeight()/2-hardButton.getHeight()*4);
+        hardButton.addListener(new InputListener(){
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                dispose();
+                if(usernameInput.getText().contains("Enter Username:")){
+                    usernameInput.setText("");
+                }
+                game.setScreen(new BreakoutScreen(game, 36, usernameInput.getText(), -10f, 2, 4));
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -69,7 +113,9 @@ public class MainMenu implements Screen {
                 return true;
             }
         });
-        stage.addActor(playButton);
+        stage.addActor(easyButton);
+        stage.addActor(mediumButton);
+        stage.addActor(hardButton);
         stage.addActor(howToButton);
         stage.addActor(usernameInput);
     }
